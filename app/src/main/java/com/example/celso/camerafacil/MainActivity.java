@@ -106,15 +106,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File arquivoFoto = null;//arquivo da foto recebe vazio
-    //método só p salvar aquivo
-    //método criando araquivo BOTANDO O NOME DA HORA E DATA PARA NAO SOBRESCREVER, CASO DESEJE SOBRESCRER BASTA BOTAR O MEMSO NOME
+    //método criando arquivo BOTANDO O NOME DA HORA E DATA PARA NAO SOBRESCREVER, CASO DESEJE SOBRESCRER BASTA BOTAR O MEMSO NOME
     private File criarArquivo() throws IOException {
-        //
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); //npme do arquivo vai com a data e a hora que a foto foi tirada
-        File pasta = getExternalFilesDir(Environment.DIRECTORY_PICTURES); //salvando na galeria, para salvar em um diretorio privado do app bastta alterar o metodo para "getExternalFilesDir()"
+        // Nome do arquivo vai com a data e a hora que a foto foi tirada
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // Salvando em um diretorio privado do app usando o método getExternalFilesDir()
+        File pasta = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imagem = new File(pasta.getPath() + File.separator + "JPG_" + timeStamp + ".jpg");
         return imagem; // A IMAGEM ESTA AQUI DENTRO, BASTA TRABALHAR COM ELA
-
     }
 
 
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void exibirImagem() {
-                //DECODIFICANDO A IMAGEM PARA CABER NA TELA DO CELULAR
+        //DECODIFICANDO A IMAGEM PARA CABER NA TELA DO CELULAR
         int targetW= imagem.getWidth();
         int targetH= imagem.getHeight();
         BitmapFactory.Options bmOptions= new BitmapFactory.Options();
@@ -163,17 +162,13 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
         imagem.setImageBitmap(bitmap);
 
-        //tentantivas de botar a imagme dentro do Drawable
-
-        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-        imagem.setImageDrawable(drawable);
     }
 
 
 
 
 
-        //permissoes
+    //permissoes
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == PERMISSAO_REQUEST) {
