@@ -92,13 +92,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File arquivoFoto = null;
-    // Método criando arquivo de imagem com o nome da hora e data que foi tirada para criar fotos diferentes
+    // Método cria imagem com o nome APP_ML usando persistencia interna do Android
     private File criarArquivo() throws IOException {
-        // Nome do arquivo vai com a data e a hora que a foto foi tirada
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         // Salvando em um diretorio privado do app usando o método getExternalFilesDir()
         File pasta = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imagem = new File(pasta.getPath() + File.separator + "APP_ML" + timeStamp + ".jpg");
+        File imagem = new File(pasta.getPath() + File.separator + "APP_ML" + ".jpg");
         return imagem;
     }
 
