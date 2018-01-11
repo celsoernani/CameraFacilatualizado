@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,7 +17,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,32 +24,26 @@ import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
-    //constantes
+
     private static final int PERMISSAO_REQUEST = 2;
-    private ImageView imagem; //declarando a imagem
+    private ImageView imagem;
     private final int GALERIA_IMAGENS = 1;
-    private final int CAMERA = 3; // constante da galeria
-    private final int TIRARFOTO = 4; // constante da galeria
-
-    //converter bitmap
-    private File diretorio;
-    private String nomeDiretorio;
-    private String diretorioApp;
-
+    private final int CAMERA = 3;
+    private final int TIRARFOTO = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //permissões para poder salvar no cartao de memoria do celular
+        // Permissões
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
             }
         }
-        //permissões para poder salvar e na galria no cartao de memoria do celular
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             } else {
@@ -60,40 +51,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        imagem = findViewById(R.id.imageView); //referencias
+        imagem = findViewById(R.id.imageView);
+        // Botão de chamar a galeria
         Button button = findViewById(R.id.button);
+        // Botão de chamar a câmera
+        Button button1 = findViewById(R.id.button2);
 
-        button.setOnClickListener(new View.OnClickListener() { //ação de clicar
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //intent da camera
-
-
-                //com o parametro de volta da content realiza o star da activie da camera
-
+                // Com o parâmetro de volta da content realiza o start da activity da camera
                 startActivityForResult(intent, GALERIA_IMAGENS);
-
             }
         });
 
-
-        //botao de chamar a camera
-        Button button1 = findViewById(R.id.button2);
-
-        //função de chamar a camera
+        // Função de chamar a câmera
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //intenção de captura de imagem
+                // Intenção de captura de imagem
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     try {
-                        //tenta criar o arquivo
                         arquivoFoto = criarArquivo();
-                    } catch (IOException ex) {
-                        // Manipulação em caso de falha de criação do arquivo
+                    } catch (IOException e) {
+                        // Print em caso de falha de criação do arquivo
+                        e.printStackTrace();
                     }
                     if (arquivoFoto != null) {
-                        //caso exista o arquivo, ele vai criar um arquivo URI
+                        // Caso exista o arquivo, ele vai criar um arquivo URI
                         Uri photoURI = FileProvider.getUriForFile(getBaseContext(),getBaseContext().getApplicationContext().getPackageName() + ".provider", arquivoFoto);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(takePictureIntent, TIRARFOTO);
@@ -102,24 +89,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
-    private File arquivoFoto = null;//arquivo da foto recebe vazio
-    //método criando arquivo BOTANDO O NOME DA HORA E DATA PARA NAO SOBRESCREVER, CASO DESEJE SOBRESCRER BASTA BOTAR O MEMSO NOME
+    private File arquivoFoto = null;
+    // Método criando arquivo de imagem com o nome da hora e data que foi tirada para criar fotos diferentes
     private File criarArquivo() throws IOException {
         // Nome do arquivo vai com a data e a hora que a foto foi tirada
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         // Salvando em um diretorio privado do app usando o método getExternalFilesDir()
         File pasta = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imagem = new File(pasta.getPath() + File.separator + "JPG_" + timeStamp + ".jpg");
-        return imagem; // A IMAGEM ESTA AQUI DENTRO, BASTA TRABALHAR COM ELA
+        File imagem = new File(pasta.getPath() + File.separator + "APP_ML" + timeStamp + ".jpg");
+        return imagem;
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Condição que leva o usuário para a galeria
         if (resultCode == RESULT_OK && requestCode == GALERIA_IMAGENS) {
             Uri selectedImage = data.getData();
             String[] filePath = {MediaStore.Images.Media.DATA};
@@ -130,16 +116,16 @@ public class MainActivity extends AppCompatActivity {
             c.close();
             Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
             imagem.setImageBitmap(thumbnail);
-
         }
+        // Mostrando na ImageView declarada globalmente
+        // Condição que faz o usuário salvar a foto para poder aparecer na tela principal
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data"); // a foto esta na variavel imageBItmap
-            //fução de glcm"classificador" pode vir aqui
-
-            imagem.setImageBitmap(imageBitmap);//mostrando na imagem view declarado la em cima
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imagem.setImageBitmap(imageBitmap);
         }
-        //RETORNO DA FUNÇÃO. APENAS MOSTRANDO A IMAGEM
+        // Retorno do método apenas mostrando a imagem
+        // Condição que leva o usuário para a câmera e mostra a imagem capturada
         if (requestCode == TIRARFOTO && resultCode == RESULT_OK) {
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                     Uri.fromFile(arquivoFoto))
@@ -147,8 +133,9 @@ public class MainActivity extends AppCompatActivity {
             exibirImagem();
         }
     }
+
+    // Esse método exibe a imagem na tela principal do App depois que é tirada a foto
     private void exibirImagem() {
-        //DECODIFICANDO A IMAGEM PARA CABER NA TELA DO CELULAR
         int targetW= imagem.getWidth();
         int targetH= imagem.getHeight();
         BitmapFactory.Options bmOptions= new BitmapFactory.Options();
@@ -161,14 +148,9 @@ public class MainActivity extends AppCompatActivity {
         bmOptions.inSampleSize= scaleFactor;
         Bitmap bitmap = BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
         imagem.setImageBitmap(bitmap);
-
     }
 
-
-
-
-
-    //permissoes
+    // Permissão master método obrigatório para Apps que usam permissão
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == PERMISSAO_REQUEST) {
@@ -180,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
     }
-
-
 
 }
 
