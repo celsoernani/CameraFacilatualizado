@@ -10,11 +10,14 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="32dp"
-        android:text="ABRIR GALERIA"
+        android:backgroundTint="@color/bkgdButton"
+        android:text="Abrir Galeria"
+        android:textColor="@color/fontButton"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -31,15 +34,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_foreground" />
+        app:srcCompat="@mipmap/ic_launcher_foreground"
+        tools:ignore="VectorDrawableCompat" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="36dp"
         android:layout_marginTop="32dp"
+        android:backgroundTint="@color/bkgdButton"
         android:text="Tirar Foto"
+        android:textColor="@color/fontButton"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -52,7 +59,7 @@
         android:layout_marginTop="8dp"
         android:text="Classe"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
