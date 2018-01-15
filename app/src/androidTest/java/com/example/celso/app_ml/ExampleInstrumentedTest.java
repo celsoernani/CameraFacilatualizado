@@ -1,4 +1,4 @@
-package com.example.celso.camerafacil;
+package com.example.celso.app_ml;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

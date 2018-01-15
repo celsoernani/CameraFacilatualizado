@@ -1,4 +1,4 @@
-package com.example.celso.camerafacil;
+package com.example.celso.app_ml;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,9 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private final int GALERIA_IMAGENS = 1;
     private final int CAMERA = 3;
     private final int TIRARFOTO = 4;
+
+    public MainActivity() throws IOException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     private File arquivoFoto = null;
     // Método cria imagem com o nome APP_ML usando persistencia interna do Android
-    private File criarArquivo() throws IOException {
+    public File criarArquivo() throws IOException {
         // Salvando em um diretorio privado do app usando o método getExternalFilesDir()
         File pasta = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imagem = new File(pasta.getPath() + File.separator + "APP_ML" + ".jpg");

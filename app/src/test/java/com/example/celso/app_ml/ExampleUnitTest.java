@@ -1,4 +1,4 @@
-package com.example.celso.camerafacil;
+package com.example.celso.app_ml;
 
 import org.junit.Test;
 
