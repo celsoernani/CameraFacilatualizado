@@ -1,4 +1,4 @@
-package com.example.celso.app_ml;
+package com.embrapii.it2b.app_ml;
 
 import org.junit.Test;
 

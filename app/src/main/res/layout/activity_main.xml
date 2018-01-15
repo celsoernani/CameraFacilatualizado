@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context="com.example.celso.app_ml.MainActivity"
+    tools:context="com.embrapii.it2b.app_ml.MainActivity"
     tools:layout_editor_absoluteY="81dp">
 
     <Button
@@ -41,15 +41,13 @@
         android:id="@+id/button2"
         android:layout_width="160dp"
         android:layout_height="58dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/bkgdButton"
         android:text="Tirar Foto"
         android:textColor="@color/fontButton"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
