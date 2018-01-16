@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private final int GALERIA_IMAGENS = 1;
     private final int CAMERA = 3;
     private final int TIRARFOTO = 4;
+    public Bitmap imageGrayCamera = null;
+    public Bitmap imageGrayGaleria = null;
 
     public MainActivity() throws IOException {
     }
@@ -113,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
             String picturePath = c.getString(columnIndex);
             c.close();
             Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-            imagem.setImageBitmap(thumbnail);
+            imageGrayGaleria = doGreyscale(thumbnail);
+            //imagem.setImageBitmap(thumbnail);
+            imagem.setImageBitmap(imageGrayGaleria);
         }
         // Mostrando na ImageView declarada globalmente
         // Condição que faz o usuário salvar a foto para poder aparecer na tela principal
@@ -145,7 +150,46 @@ public class MainActivity extends AppCompatActivity {
         bmOptions.inJustDecodeBounds= false;
         bmOptions.inSampleSize= scaleFactor;
         Bitmap bitmap = BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
-        imagem.setImageBitmap(bitmap);
+        imageGrayCamera = doGreyscale(bitmap);
+        //imagem.setImageBitmap(bitmap);
+        imagem.setImageBitmap(imageGrayCamera);
+    }
+
+    public static Bitmap doGreyscale(Bitmap src) {
+        // constant factors
+        final double GS_RED = 0.299;
+        final double GS_GREEN = 0.587;
+        final double GS_BLUE = 0.114;
+
+        // create output bitmap
+        Bitmap imageGray = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        // Informações dos pixels
+        int A, R, G, B;
+        int pixel;
+
+        // Pega o tamanho da imagem
+        int width = src.getWidth();
+        int height = src.getHeight();
+
+        // Varre cada pixel da imagem
+        for(int x = 0; x < width; ++x) {
+            for(int y = 0; y < height; ++y) {
+                // Consegue o valor do pixel
+                pixel = src.getPixel(x, y);
+                // retrieve color of all channels
+                A = Color.alpha(pixel);
+                R = Color.red(pixel);
+                G = Color.green(pixel);
+                B = Color.blue(pixel);
+                // take conversion up to one single value
+                R = G = B = (int)(GS_RED * R + GS_GREEN * G + GS_BLUE * B);
+                // set new pixel color to output bitmap
+                imageGray.setPixel(x, y, Color.argb(A, R, G, B));
+            }
+        }
+
+        // Retorna a imagem em escala de cinza
+        return imageGray;
     }
 
     // Permissão master método obrigatório para Apps que usam permissão
